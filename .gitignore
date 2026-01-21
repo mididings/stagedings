@@ -131,3 +131,5 @@ dmypy.json
 .vscode/
 
 .env
+.kiota.log
+kiota-lock.json
