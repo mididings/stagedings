@@ -1,3 +1,15 @@
+## [1.4.0] - 2026-01-21
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for version 1.3.0 release
+- Remove unused images
+- Ignore Kiota generator files
+- Bump to jQuery 4.0.0
+- Drop jQuery3 script
+- Update screenshot
+- Update screenshot (code18)
+- Add footer and update navbar links
 ## [1.3.0] - 2025-11-11
 
 ### 🚀 Features
