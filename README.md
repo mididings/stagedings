@@ -1,26 +1,30 @@
 # stagedings
-[![Core: mididings](https://img.shields.io/badge/core-mididings-blue)](https://fastapi.tiangolo.com/)
-[![Backend: FastAPI](https://img.shields.io/badge/bridge-FastAPI-blue)](https://fastapi.tiangolo.com/)
-[![Protocol: WebSockets](https://img.shields.io/badge/protocol-WebSockets-orange)](https://fastapi.tiangolo.com/advanced/websockets/)
+An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings/mididings) script
+
+[![Core: mididings](https://img.shields.io/badge/core-mididings-blue)](https://github.com/mididings/mididings)
+[![Backend: FastAPI](https://img.shields.io/badge/backend-FastAPI-green)](https://fastapi.tiangolo.com/)
+[![Protocol: MIDI](https://img.shields.io/badge/protocol-MIDI-purple)](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 [![Protocol: OSC](https://img.shields.io/badge/protocol-OSC-purple)](http://opensoundcontrol.org/)
-[![Protocol: MIDI](https://img.shields.io/badge/protocol-MIDI-yellow)](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
-[![OpenAPI Spec](https://img.shields.io/badge/OpenAPI-available-brightgreen)](https://swagger.io/specification/)
-### **stagedings** is a modern API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings/mididings) script
+[![Protocol: WebSockets](https://img.shields.io/badge/protocol-WebSockets-purple)](https://fastapi.tiangolo.com/advanced/websockets/)
+[![OpenAPI Spec](https://img.shields.io/badge/OpenAPI-Yes-green)](https://swagger.io/specification/)
+
 
 ---
-> 🤔 **Why stagedings?** 
-> * It offers a modern, web-based interface with enhanced flexibility and real-time control capabilities
->   * It is an alternative of the legacy **`livedings UI`**, which was based on Tkinter 🪓
-> * Adds a HTTP layer that facilitates control and navigation allowing the abstraction of OSC subcalls
->   * Thanks to FastAPI that offers an Open API specification, so it is possible to generate a client SDK in multiple language with an Open Api Code generator like [Kiota](https://github.com/microsoft/kiota) making possible to control [mididings](https://github.com/mididings/mididings) in .NET, Go, Java, PHP, Python, Ruby and TypeScript.
-> * A **mididings scene patch dictionary** defined in the `run` section of a [mididings](https://github.com/mididings/mididings) script is required to work correctly
->   * 🗒️ See the [mididings](https://github.com/mididings/mididings) documentation on the [`run` section here](https://mididings.github.io/mididings/main.html#mididings.run) for how to structure your patch
+### What does stagings allow?
+* A web-based interface
+  * An alternative of the legacy **`livedings UI`**, which was based on Tkinter 🪓
+* A HTTP layer that facilitates control and navigation allowing the abstraction of OSC subcalls
+* An OpenAPI specification making possible to generate a client SDK in multiple language with a code  generator like [Kiota](https://github.com/microsoft/kiota) making possible to use the API in .NET, Go, Java, PHP, Python, Ruby and TypeScript.
 
+#### A scene patch dictionary defined in the `run` section of a **mididings** script is required to work correctly
+* 🗒️ See the [mididings documentation](https://mididings.github.io/mididings) on the [`run` section here](https://mididings.github.io/mididings/main.html#mididings.run) for how to structure your patch
+ 
+  
 ## Frontend
 
-### A responsive, real-time interface for scene/subscene navigation in mididings
+### A responsive multiclient, real-time interface for scene/subscene navigation
 
-<img src="docs/stagedings-ui.png" alt="stagedings UI screenshot" width="700"/>
+<img src="docs/frontend.png" alt="stagedings UI screenshot" width="700"/>
 
 ---
 ## Features
@@ -32,11 +36,11 @@
 
 ---
 
-### The UI interface allow
+### The frontend allow
 * Direct navigation through scenes and subscenes
 * Exposes the Restart, Panic, Query and Quit commands
 
-### The REST API expose
+### The backend allow
 * Endpoints for direct navigation through scenes and subscenes
 * Endpoints to the Restart, Panic, Query and Quit commands
 
@@ -57,18 +61,14 @@
 * pip install jinja2
 * pip install scalar-fastapi
 * pip install uvicorn\[standard\]
----
 ## ▶️ Running the application
-
 * In the stagedings/src directory
   
   * uvicorn main:app --port 5000 --host 0.0.0.0
 
 * Then navigate to http://localhost:5000
-  
-
-## Ecosystem
-<img src="docs/ecosystem.png" alt="stagedings UI screenshot" width="800"/>
+## 🔗 Communication Workflow
+<img src="docs/workflow.png" alt="stagedings UI screenshot" width="800"/>
 
 ### 💬 Feedback & Contributions
 
@@ -79,3 +79,5 @@ We welcome bug reports, feature ideas, and contributions! Please open an issue o
 All files in this repository are released under the terms of the GNU
 General Public License as published by the Free Software Foundation;
 either version 2 or later of the License.
+
+Made in 🇨🇦
