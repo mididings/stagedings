@@ -1,0 +1,389 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "stagedings",
+    "summary": "An UI and API for mididings community version",
+    "description": "\n### You will be able to:\n\n* **Navigating Scenes and Subscenes**\n* **Control mididings**\n",
+    "version": "1.0.0",
+    "x-logo": {
+      "url": "https://avatars.githubusercontent.com/u/121540801?s=400&u=2d3daf12927631aecd807b2d6dfb90652cc22ae8&v=4"
+    }
+  },
+  "paths": {
+    "/api/scenes/{sceneId}/subscenes/{subsceneId}/activate": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the given scene and subscene number.",
+        "description": "Switch to the given scene and subscene number.",
+        "operationId": "switch_scene_api_scenes__sceneId__subscenes__subsceneId__activate_post",
+        "parameters": [
+          {
+            "name": "sceneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Sceneid"
+            }
+          },
+          {
+            "name": "subsceneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Subsceneid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenes/{sceneId}/activate": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the given scene number.",
+        "description": "Switch to the given scene number.",
+        "operationId": "switch_scene_api_scenes__sceneId__activate_post",
+        "parameters": [
+          {
+            "name": "sceneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Sceneid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/subscenes/{subsceneId}/activate": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the given subscene number.",
+        "description": "Switch to the given subscene number.",
+        "operationId": "switch_subscene_api_subscenes__subsceneId__activate_post",
+        "parameters": [
+          {
+            "name": "subsceneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Subsceneid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenes/prev": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the previous scene.",
+        "description": "Switch to the previous scene.",
+        "operationId": "prev_scene_api_scenes_prev_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/scenes/next": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the next scene.",
+        "description": "Switch to the next scene.",
+        "operationId": "next_scene_api_scenes_next_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/subscenes/prev": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the previous subscene.",
+        "description": "Switch to the previous subscene.",
+        "operationId": "prev_subscene_api_subscenes_prev_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/subscenes/next": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "summary": "Switch to the next subscene.",
+        "description": "Switch to the next subscene.",
+        "operationId": "next_subscene_api_subscenes_next_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/system/panic": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Send all-notes-off on all channels and on all output ports.",
+        "description": "Send all-notes-off on all channels and on all output ports.",
+        "operationId": "panic_api_system_panic_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/system/quit": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Terminate mididings.",
+        "description": "Terminate mididings.",
+        "operationId": "quit_api_system_quit_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/system/restart": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Restart mididings.",
+        "description": "Restart mididings.",
+        "operationId": "restart_api_system_restart_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/api/system/query": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Send config, current scene/subscene to all notify ports.",
+        "description": "Send config, current scene/subscene to all notify ports.",
+        "operationId": "query_api_system_query_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
