@@ -1,5 +1,5 @@
-# stagedings
-An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings/mididings) script
+# 🎹 stagedings
+An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings) script
 
 [![Core: mididings](https://img.shields.io/badge/core-mididings-blue)](https://github.com/mididings/mididings)
 [![Backend: FastAPI](https://img.shields.io/badge/backend-FastAPI-green)](https://fastapi.tiangolo.com/)
@@ -10,16 +10,19 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 
 
 ---
-### What does stagings allow?
+### What does stagedings allow?
 * A web-based interface
-  * An alternative of the legacy **`livedings UI`**, which was based on Tkinter 🪓
+  * Alternative of the legacy **`livedings UI`**, which was based on Tkinter 🪓
 * A HTTP layer that facilitates control and navigation allowing the abstraction of OSC subcalls
 * An OpenAPI specification making possible to generate a client SDK in multiple language with a code  generator like [Kiota](https://github.com/microsoft/kiota) making possible to use the API in .NET, Go, Java, PHP, Python, Ruby and TypeScript.
 
-#### A scene patch dictionary defined in the `run` section of a **mididings** script is required to work correctly
-* 🗒️ See the [mididings documentation](https://mididings.github.io/mididings) on the [`run` section here](https://mididings.github.io/mididings/main.html#mididings.run) for how to structure your patch
- 
-  
+⚠️ *A scene patch dictionary defined in the `run` section of your mididings script is required to work correctly, check the [`run` function documentation for more information](https://mididings.github.io/mididings/main.html#mididings.run) on how to structure your patch.*
+
+
+## 📘 API documentation
+- [stagedings endpoints](https://mididings.github.io/stagedings)
+- [mididings manual](https://mididings.github.io/mididings)
+
 ## Frontend
 
 ### A responsive multiclient, real-time interface for scene/subscene navigation
@@ -44,6 +47,13 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 * Endpoints for direct navigation through scenes and subscenes
 * Endpoints to the Restart, Panic, Query and Quit commands
 
+#### ℹ️ About commands
+* ***Restart*** will restart mididings process
+* ***Panic*** send not off to all ports and all channels
+* ***Quit*** stop mididings, be carefull
+* *Query is a work in progress*
+
+
 ---
 
 ## ⚒️ Installation & dependencies
@@ -59,7 +69,6 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
   * See the mididings README for build instructions
 * pip install fastapi
 * pip install jinja2
-* pip install scalar-fastapi
 * pip install uvicorn\[standard\]
 ## ▶️ Running the application
 * In the stagedings/src directory
