@@ -1,3 +1,22 @@
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- Change target attribute of navbar brand link to _self
+
+### 🚜 Refactor
+
+- Replace navbar and footer with new templates
+
+### 📚 Documentation
+
+- Update README for clarity and structure improvements
+- Update README for clarity and add API documentation links
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for version 1.4.0 release
+- Update images
 ## [1.4.0] - 2026-01-21
 
 ### ⚙️ Miscellaneous Tasks
@@ -10,6 +29,7 @@
 - Update screenshot
 - Update screenshot (code18)
 - Add footer and update navbar links
+- Update README
 ## [1.3.0] - 2025-11-11
 
 ### 🚀 Features
@@ -19,24 +39,17 @@
 
 ### 🚜 Refactor
 
+- Update UI and button labels for clarity
 - Update no content view
 - Update navbar link
 
 ### ⚙️ Miscellaneous Tasks
 
+- Add CHANGELOG for version 1.2.0
+- Update CHANGELOG for unreleased changes
 - Update stagedings UI image
 - Add scalar-fastapi installation instruction to README
 - Remove doc url instructions from README
-## [1.2.1] - 2025-10-02
-
-### 🚜 Refactor
-
-- Update UI and button labels for clarity
-
-### ⚙️ Miscellaneous Tasks
-
-- Add CHANGELOG for version 1.2.0
-- Update CHANGELOG for unreleased changes
 ## [1.2.0] - 2025-09-12
 
 ### 🚀 Features
