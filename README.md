@@ -20,7 +20,7 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 
 
 ## 📘 API documentation
-- [stagedings endpoints](https://mididings.github.io/stagedings)
+- [stagedings manual](https://mididings.github.io/stagedings)
 - [mididings manual](https://mididings.github.io/mididings)
 
 ## Frontend
@@ -75,7 +75,11 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
   
   * uvicorn main:app --port 5000 --host 0.0.0.0
 
-* Then navigate to http://localhost:5000
+* Then navigate to http://your-server-name:5000
+
+## High Level Overview
+<img src="docs/overview.png" alt="stagedings UI screenshot" width="800"/>
+
 ## 🔗 Communication Workflow
 <img src="docs/workflow.png" alt="stagedings UI screenshot" width="800"/>
 
