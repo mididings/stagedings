@@ -1,4 +1,4 @@
-## [unreleased]
+## [20250818] - 2026-03-15
 
 ### 🐛 Bug Fixes
 
@@ -12,11 +12,13 @@
 
 - Update README for clarity and structure improvements
 - Update README for clarity and add API documentation links
+- Add overview diagram to documentation
 
 ### ⚙️ Miscellaneous Tasks
 
 - Update CHANGELOG for version 1.4.0 release
 - Update images
+- Update CHANGELOG
 ## [1.4.0] - 2026-01-21
 
 ### ⚙️ Miscellaneous Tasks
