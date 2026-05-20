@@ -1,12 +1,9 @@
-# 🎹 stagedings
+#  stagedings
 An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings) script
 
-[![Core: mididings](https://img.shields.io/badge/core-mididings-blue)](https://github.com/mididings/mididings)
-[![Backend: FastAPI](https://img.shields.io/badge/backend-FastAPI-green)](https://fastapi.tiangolo.com/)
-[![Protocol: MIDI](https://img.shields.io/badge/protocol-MIDI-purple)](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
-[![Protocol: OSC](https://img.shields.io/badge/protocol-OSC-purple)](http://opensoundcontrol.org/)
-[![Protocol: WebSockets](https://img.shields.io/badge/protocol-WebSockets-purple)](https://fastapi.tiangolo.com/advanced/websockets/)
+
 [![OpenAPI Spec](https://img.shields.io/badge/OpenAPI-Yes-green)](https://swagger.io/specification/)
+[![Discourse](https://img.shields.io/badge/community-Discourse-orange)](https://mididings.discourse.group/)
 
 
 ---
@@ -63,6 +60,8 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
   * Create a .env file
     * Add the key STAGEDINGS_WS_HOST with the server name and the port of your choice:
       * STAGEDINGS_WS_HOST=localhost:5000
+      * STAGEDINGS_WS_HOST=your-server-ip:5000
+      * STAGEDINGS_WS_HOST=your-server-hostname:5000
 
 #### In a Python Virtual Environment
 * mididings community >= **20250818** with OSC support 
