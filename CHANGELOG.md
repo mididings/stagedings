@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.2 - 2026-05-25
+
+### Documentation
+
+- Update the excalidraw document and  images for the README
+
+### Miscellaneous Tasks
+
+- add git-cliff configuration for changelog generation
+
 ## 1.4.1 - 2026-05-20
 
 ### Bug Fixes
