@@ -30,7 +30,7 @@ maintainers = [
 
 dependencies = [
     "fastapi",
-    "uvicorn",
+    "uvicorn[standard]",
     "python-dotenv",
     "jinja2",
     "pydantic",
