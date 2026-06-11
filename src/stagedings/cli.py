@@ -6,8 +6,15 @@
 import os
 import json
 import asyncio
-from core.control import Controller
-from core.connection import ConnectionManager
+import uvicorn
+from dotenv import load_dotenv
+
+from pathlib import Path
+from importlib import resources
+import stagedings
+
+from stagedings.core.control import Controller
+from stagedings.core.connection import ConnectionManager
 
 from fastapi import Request, FastAPI, WebSocket, WebSocketDisconnect, Response
 from fastapi.responses import HTMLResponse
@@ -15,7 +22,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.openapi.utils import get_openapi
 from scalar_fastapi import get_scalar_api_reference
-from dotenv import load_dotenv
+
+BASE_DIR = Path(stagedings.__file__).resolve().parent
 
 description = """
 ### You will be able to:
@@ -47,11 +55,14 @@ app.openapi = custom_openapi
 
 """  Configuration """
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=str(BASE_DIR / "static")),
+    name="static"
+)
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
-templates = Jinja2Templates(directory="templates")
-
-config = os.path.join("static", "config.json")
+config = resources.files(stagedings) / "static" / "config.json"
 with open(config) as FILE:  
     configuration = json.load(FILE)
 
@@ -88,13 +99,14 @@ async def scalar_html():
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def entry_point(request: Request):
-    ws_host = os.getenv("STAGEDINGS_WS_HOST", "localhost")
+    ws_host = os.getenv("STAGEDINGS_WS_HOST", "localhost:5000")
     return templates.TemplateResponse(
         name="ui.html" if controller.scene_controller.scenes else "no_context.html",
         context={
             "request": request,
             "ws_host": ws_host,
         },
+        request=request,
     )
 
 # Navigation endpoints
@@ -269,3 +281,10 @@ delegates = {
     "mididings_context_update": mididings_context_update,
     
 }
+
+def main():
+    uvicorn.run(
+        "stagedings.cli:app",
+        host="0.0.0.0",
+        port=5000
+    )

@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stagedings"
+version = "0.1.0"
+description = "Web API for controlling Mididings"
+readme = "README.md"
+requires-python = ">=3.9"
+license-files = ["LICENSE.md"]
+
+authors = [
+    {
+        name = "Stéphane Gagnon", 
+        email = "stefets2112@gmail.com"
+    },
+]
+
+maintainers = [
+    {
+        name = "Stéphane Gagno", 
+        email = "stefets2112@gmail.com"
+    },
+    {
+        name = "George Rawlinson", 
+        email = "george@rawlinson.net.nz"
+    },
+]
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "jinja2",
+    "pydantic",
+    "scalar-fastapi"
+]
+
+classifiers = [
+  "Topic :: Multimedia :: Sound/Audio :: MIDI",
+  "Programming Language :: Python :: 3",
+  "Development Status :: 5 - Production/Stable",
+]
+
+[tool.setuptools.package-data]
+stagedings = [
+    "templates/**/*",
+    "static/**/*"
+]
+
+[project.scripts]
+stagedings = "stagedings.cli:main"
+
+[project.urls]
+homepage = "https://github.com/mididings/stagedings"
+documentation = "https://mididings.github.io/stagedings/"
