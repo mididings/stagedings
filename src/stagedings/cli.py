@@ -300,9 +300,20 @@ def main():
     )
     args = parser.parse_args()
 
-    ws_host = args.ws_host
-    if ":" not in ws_host:
-        ws_host = f"{ws_host}:{args.port}"
+    if args.ws_host:
+        if ":" in args.ws_host:
+            host, _, port_str = args.ws_host.partition(":")
+            try:
+                ws_port = int(port_str)
+            except ValueError:
+                parser.error("--ws-host port must be an integer and must match --port")
+            if ws_port != args.port:
+                parser.error("--ws-host port must match --port")
+            ws_host = args.ws_host
+        else:
+            ws_host = f"{args.ws_host}:{args.port}"
+    else:
+        ws_host = f"localhost:{args.port}"
 
     uvicorn.run(
         "stagedings.cli:app",
