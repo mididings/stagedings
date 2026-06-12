@@ -3,11 +3,11 @@
 
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+import argparse
 import os
 import json
 import asyncio
 import uvicorn
-from dotenv import load_dotenv
 
 from pathlib import Path
 from importlib import resources
@@ -73,8 +73,8 @@ controller = Controller(configuration["osc_server"])
 # WebSocket connection manager
 connection_manager = ConnectionManager()
 
-# Load environment variables
-load_dotenv()
+# WebSocket hostname for the UI
+ws_host = "localhost:5000"
 
 async def mididings_context_update():
     await controller.set_dirty(False)
@@ -95,7 +95,6 @@ async def scalar_html():
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def entry_point(request: Request):
-    ws_host = os.getenv("STAGEDINGS_WS_HOST", "localhost:5000")
     return templates.TemplateResponse(
         name="ui.html" if controller.scene_controller.scenes else "no_context.html",
         context={
@@ -279,8 +278,34 @@ delegates = {
 }
 
 def main():
+    global ws_host
+
+    parser = argparse.ArgumentParser(description="Run stagedings FastAPI server")
+    parser.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="FastAPI listen host",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=5000,
+        help="FastAPI listen port",
+    )
+    parser.add_argument(
+        "--ws-host",
+        dest="ws_host",
+        default=ws_host,
+        help="WebSocket hostname or IP address, optionally with port",
+    )
+    args = parser.parse_args()
+
+    ws_host = args.ws_host
+    if ":" not in ws_host:
+        ws_host = f"{ws_host}:{args.port}"
+
     uvicorn.run(
         "stagedings.cli:app",
-        host="0.0.0.0",
-        port=5000
+        host=args.host,
+        port=args.port,
     )
