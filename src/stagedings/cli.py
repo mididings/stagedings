@@ -92,10 +92,6 @@ async def scalar_html():
         # scalar_proxy_url="https://proxy.scalar.com",
     )
 
-# @app.get("/", response_class=HTMLResponse, include_in_schema=False)
-# async def index(request: Request):
-#     return templates.TemplateResponse(name="index.html", context={"request": request})
-
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def entry_point(request: Request):
