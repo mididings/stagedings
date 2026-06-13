@@ -1,31 +1,32 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "stagedings"
 version = "0.1.0"
-description = "Web API for controlling Mididings"
+description = "An API to navigate scenes and subscenes that has been configured in a mididings script"
 readme = "README.md"
 requires-python = ">=3.9"
+license = "GPL-2.0-or-later"
 license-files = ["LICENSE.md"]
+keywords = [
+    "mididings",
+    "midi",
+    "live-performance",
+    "music",
+    "control-surface",
+    "fastapi",
+    "websocket",
+    "osc"
+]
 
 authors = [
-    {
-        name = "Stéphane Gagnon", 
-        email = "stefets2112@gmail.com"
-    },
+    { name = "Stéphane Gagnon", email = "stephane-gagnon@hotmail.com" }
 ]
 
 maintainers = [
-    {
-        name = "Stéphane Gagno", 
-        email = "stefets2112@gmail.com"
-    },
-    {
-        name = "George Rawlinson", 
-        email = "george@rawlinson.net.nz"
-    },
+    { name = "Stéphane Gagnon", email = "stephane-gagnon@hotmail.com" }
 ]
 
 dependencies = [
@@ -33,7 +34,8 @@ dependencies = [
     "uvicorn[standard]",
     "jinja2",
     "pydantic",
-    "scalar-fastapi"
+    "scalar-fastapi",
+    "mididings[osc,autorestart]",
 ]
 
 classifiers = [
@@ -52,5 +54,6 @@ stagedings = [
 stagedings = "stagedings.cli:main"
 
 [project.urls]
-homepage = "https://github.com/mididings/stagedings"
-documentation = "https://mididings.github.io/stagedings/"
+Homepage = "https://github.com/mididings"
+Documentation = "https://mididings.github.io/stagedings/"
+Repository = "https://github.com/mididings/stagedings"
