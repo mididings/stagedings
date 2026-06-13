@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 - 2026-06-13
+
+### Bug Fixes
+
+- update uvicorn dependency to include standard extras
+
+### Documentation
+
+- update CHANGELOG for version 1.4.2 release
+- Update README for PyPI installation and improve image links #23
+
+### Features
+
+- Configure for PyPI (WIP) #23
+- Add release-test target and script for package release process #23
+- Add release script and update Makefile for package release process
+
+### Miscellaneous Tasks
+
+- Remove dead wood
+
+### Refactor
+
+- Remove dotenv (WIP) #23
+- Ensure the port is the same for uvicorn and the websocket
+- Remove the ws-host switch in favor of window.location.host
+
 ## 1.4.2 - 2026-05-25
 
 ### Documentation
