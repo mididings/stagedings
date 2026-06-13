@@ -1,7 +1,8 @@
 #  stagedings
-An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings) script
+An API to navigate scenes and subscenes that has been configured in a [mididings](https://github.com/mididings/mididings) script
 
-
+[![PyPI](https://img.shields.io/pypi/v/stagedings)](https://pypi.org/project/stagedings/)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 [![OpenAPI Spec](https://img.shields.io/badge/OpenAPI-Yes-green)](https://swagger.io/specification/)
 [![Discourse](https://img.shields.io/badge/community-Discourse-orange)](https://mididings.discourse.group/)
 
@@ -24,7 +25,7 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 
 ### A responsive multiclient, real-time interface for scene/subscene navigation
 
-<img src="docs/frontend.png" alt="stagedings UI screenshot" width="700"/>
+<img src="https://raw.githubusercontent.com/mididings/stagedings/main/docs/frontend.png" alt="stagedings UI screenshot" width="700"/>
 
 ---
 ## Features
@@ -53,34 +54,63 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 
 ---
 
-## ⚒️ Installation & dependencies
-#### On the server running mididings with OSC support
-* Clone this repository
-* In the stagedings/src directory
-  * Create a .env file
-    * Add the key STAGEDINGS_WS_HOST with the server name and the port of your choice:
-      * STAGEDINGS_WS_HOST=localhost:5000
-      * STAGEDINGS_WS_HOST=your-server-ip:5000
-      * STAGEDINGS_WS_HOST=your-server-hostname:5000
+## ⚒️ Installation from PyPI
+**NOTE:** This will also install mididings with OSC and AutoRestart support allowing a full working stack.
 
-#### In a Python Virtual Environment
-* mididings community >= **20250818** with OSC support 
-  * See the mididings README for build instructions
-* pip install fastapi
-* pip install jinja2
-* pip install uvicorn\[standard\]
+```sh
+# Create a Python virtual environment
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+
+# Install stagedings including mididings as a dependency
+$ pip install stagedings
+```
 ## ▶️ Running the application
-* In the stagedings/src directory
-  
-  * uvicorn main:app --port 5000 --host 0.0.0.0
+```sh
+$ stagedings [--host HOST] [--port PORT]
+```
+## Options
+* --host
+  * FastAPI server bind address
+    * Default: localhost
+    * Use 0.0.0.0 to allow network access or the server IP address
+* --port
+  * FastAPI + WebSocket server port
+    * Default: 5000
 
-* Then navigate to http://your-server-name:5000
+## Use cases
+### Local development (single machine)
+```sh
+$ stagedings
+```
+This runs everything locally on:
+```sh
+http://localhost:5000
+```
+### Network / multi-client setup
+When clients access the server from other machines, you must expose the backend:
+```sh
+$ stagedings --host 0.0.0.0
+```
+or:
+```sh
+$ stagedings --host 192.168.1.100
+```
+### Accessing the UI
+Once running, open in a browser:
+```sh
+http://dings.local.com:5000
+```
+or:
+```sh
+http://192.168.1.100:5000
+```
 
 ## High Level Overview
-<img src="docs/overview.png" alt="stagedings UI screenshot" width="800"/>
+<img src="https://raw.githubusercontent.com/mididings/stagedings/main/docs/overview.png" alt="stagedings UI screenshot" width="800"/>
 
 ## 🔗 Communication Workflow
-<img src="docs/workflow.png" alt="stagedings UI screenshot" width="800"/>
+<img src="https://raw.githubusercontent.com/mididings/stagedings/main/docs/workflow.png" alt="stagedings UI screenshot" width="800"/>
 
 ### 💬 Feedback & Contributions
 
@@ -92,4 +122,4 @@ All files in this repository are released under the terms of the GNU
 General Public License as published by the Free Software Foundation;
 either version 2 or later of the License.
 
-Made in 🇨🇦
+Made in Québec 🇨🇦
