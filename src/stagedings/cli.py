@@ -73,9 +73,6 @@ controller = Controller(configuration["osc_server"])
 # WebSocket connection manager
 connection_manager = ConnectionManager()
 
-# WebSocket hostname for the UI
-ws_host = "localhost:5000"
-
 async def mididings_context_update():
     await controller.set_dirty(False)
     await connection_manager.broadcast(
@@ -98,8 +95,7 @@ async def entry_point(request: Request):
     return templates.TemplateResponse(
         name="ui.html" if controller.scene_controller.scenes else "no_context.html",
         context={
-            "request": request,
-            "ws_host": ws_host,
+            "request": request
         },
         request=request,
     )
@@ -278,12 +274,11 @@ delegates = {
 }
 
 def main():
-    global ws_host
 
     parser = argparse.ArgumentParser(description="Run stagedings FastAPI server")
     parser.add_argument(
         "--host",
-        default="0.0.0.0",
+        default="localhost",
         help="FastAPI listen host",
     )
     parser.add_argument(
@@ -292,28 +287,7 @@ def main():
         default=5000,
         help="FastAPI listen port",
     )
-    parser.add_argument(
-        "--ws-host",
-        dest="ws_host",
-        default=ws_host,
-        help="WebSocket hostname or IP address, optionally with port",
-    )
     args = parser.parse_args()
-
-    if args.ws_host:
-        if ":" in args.ws_host:
-            host, _, port_str = args.ws_host.partition(":")
-            try:
-                ws_port = int(port_str)
-            except ValueError:
-                parser.error("--ws-host port must be an integer and must match --port")
-            if ws_port != args.port:
-                parser.error("--ws-host port must match --port")
-            ws_host = args.ws_host
-        else:
-            ws_host = f"{args.ws_host}:{args.port}"
-    else:
-        ws_host = f"localhost:{args.port}"
 
     uvicorn.run(
         "stagedings.cli:app",
