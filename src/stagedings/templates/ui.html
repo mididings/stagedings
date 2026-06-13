@@ -129,7 +129,8 @@
     $(document).ready(function () {
 
         let scheme = window.location.protocol === "https:" ? "wss" : "ws";
-        let socket = new WebSocket(`${scheme}://${window.STAGEDINGS_CONFIG.wsHost}/ws`);
+        let host = window.location.host;
+        let socket = new WebSocket(`${scheme}://${host}/ws`);
 
         socket.onopen = function (event) {
             socket.send('{"action" : "on_connect"}');

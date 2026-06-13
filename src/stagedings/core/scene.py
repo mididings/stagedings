@@ -7,7 +7,7 @@
 '''
     Scene control
 '''
-from models.base_model import Scene, SubScene
+from stagedings.models.base_model import Scene, SubScene
 
 class SceneController:
     def __init__(self) -> None:

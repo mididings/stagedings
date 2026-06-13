@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stagedings"
+version = "0.1.0"
+description = "An API to navigate scenes and subscenes that has been configured in a mididings script"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "GPL-2.0-or-later"
+license-files = ["LICENSE.md"]
+keywords = [
+    "mididings",
+    "midi",
+    "live-performance",
+    "music",
+    "control-surface",
+    "fastapi",
+    "websocket",
+    "osc"
+]
+
+authors = [
+    { name = "Stéphane Gagnon", email = "stephane-gagnon@hotmail.com" }
+]
+
+maintainers = [
+    { name = "Stéphane Gagnon", email = "stephane-gagnon@hotmail.com" }
+]
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "jinja2",
+    "pydantic",
+    "scalar-fastapi",
+    "mididings[osc,autorestart]",
+]
+
+classifiers = [
+  "Topic :: Multimedia :: Sound/Audio :: MIDI",
+  "Programming Language :: Python :: 3",
+  "Development Status :: 5 - Production/Stable",
+]
+
+[tool.setuptools.package-data]
+stagedings = [
+    "templates/**/*",
+    "static/**/*"
+]
+
+[project.scripts]
+stagedings = "stagedings.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/mididings"
+Documentation = "https://mididings.github.io/stagedings/"
+Repository = "https://github.com/mididings/stagedings"
