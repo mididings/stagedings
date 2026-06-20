@@ -139,6 +139,12 @@
             $('#server-state').html('<div class="card border-success">ONLINE</div>');
         }
 
+        socket.onclose = function (event) {
+            $('#client-state').html('<div class="card border-danger">OFFLINE</div>');
+            $('#mididings-state').html('<div class="card border-danger">UNKNOWN</div>');
+            $('#server-state').html('<div class="card border-danger">OFFLINE</div>');
+        }
+
         socket.onmessage = function (event) {
             const json = JSON.parse(event.data);
             const action = json["action"];
@@ -171,6 +177,7 @@
 
         function terminate() {
             socket.close();
+            $('#server-state').html('<div class="card border-danger">OFFLINE</div>');
             $('#client-state').html('<div class="card border-danger">OFFLINE</div>');
             $('#mididings-state').html('<div class="card border-danger">OFFLINE</div>');
         }
