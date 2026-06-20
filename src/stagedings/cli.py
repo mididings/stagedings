@@ -31,6 +31,8 @@ description = """
 * **Navigating Scenes and Subscenes**
 * **Control mididings**
 """
+title = "stagedings"
+version = "0.1.1"
 
 app = FastAPI()
 
@@ -38,8 +40,8 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     app.openapi_schema = get_openapi(
-        title="stagedings",
-        version="1.0.0",
+        title=title,
+        version=version,
         description=description,
         routes=app.routes,
         openapi_version="3.1.0",
@@ -95,7 +97,9 @@ async def entry_point(request: Request):
     return templates.TemplateResponse(
         name="ui.html" if controller.scene_controller.scenes else "no_context.html",
         context={
-            "request": request
+            "request": request,
+            "title": title,
+            "version": version,
         },
         request=request,
     )
