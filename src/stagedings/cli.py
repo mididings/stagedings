@@ -256,14 +256,6 @@ async def websocket_endpoint(websocket: WebSocket):
         connection_manager.disconnect(websocket)
 
 
-async def on_quit(websocket: WebSocket = None):
-    await connection_manager.broadcast(
-        {
-            "action": "on_terminate",
-        }
-    )
-
-
 async def on_connect(websocket: WebSocket = None):
     await controller.set_dirty(True)
 
