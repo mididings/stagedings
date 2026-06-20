@@ -205,12 +205,17 @@ async def query():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await connection_manager.connect(websocket)
+    last_running_state = None
+
     try:
         while websocket in connection_manager.active_connections:
-            # Send status periodic task
-            await connection_manager.broadcast(
-                {"action": "on_start" if await controller.is_running() else "on_exit"}
-            )
+            # Send status only when the running state changes
+            current_running = await controller.is_running()
+            if last_running_state is None or current_running != last_running_state:
+                await connection_manager.broadcast(
+                    {"action": "on_start" if current_running else "on_exit"}
+                )
+                last_running_state = current_running
 
             try:
                 # Handle incoming messages from the client
