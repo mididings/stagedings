@@ -31,6 +31,8 @@ description = """
 * **Navigating Scenes and Subscenes**
 * **Control mididings**
 """
+title = "stagedings"
+version = "0.1.1"
 
 app = FastAPI()
 
@@ -38,8 +40,8 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     app.openapi_schema = get_openapi(
-        title="stagedings",
-        version="1.0.0",
+        title=title,
+        version=version,
         description=description,
         routes=app.routes,
         openapi_version="3.1.0",
@@ -95,7 +97,9 @@ async def entry_point(request: Request):
     return templates.TemplateResponse(
         name="ui.html" if controller.scene_controller.scenes else "no_context.html",
         context={
-            "request": request
+            "request": request,
+            "title": title,
+            "version": version,
         },
         request=request,
     )
@@ -205,47 +209,55 @@ async def query():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await connection_manager.connect(websocket)
-    try:
-        while websocket in connection_manager.active_connections:
-            # Send status periodic task
-            await connection_manager.broadcast(
-                {"action": "on_start" if await controller.is_running() else "on_exit"}
-            )
+    last_running_state = None
+    stop_event = asyncio.Event()
 
-            try:
-                # Handle incoming messages from the client
-                data = await asyncio.wait_for(websocket.receive_json(), timeout=0.1)
-                action = data["action"]
+    async def receive_loop():
+        try:
+            while websocket in connection_manager.active_connections:
+                data = await websocket.receive_json()
+                action = data.get("action")
                 if action in delegates:
-                    (
+                    if "id" in data:
+                        await delegates[action](int(data["id"]))
+                    else:
                         await delegates[action]()
-                        if not "id" in data
-                        else await delegates[action](int(data["id"]))
-                    )
-            except asyncio.TimeoutError:
-                # No message received during the timeout, continue the loop
-                pass
+        except WebSocketDisconnect:
+            pass
+        except Exception as exc:
+            print(f"WebSocket receive error: {exc}")
+        finally:
+            stop_event.set()
+
+    async def monitor_loop():
+        nonlocal last_running_state
+        while not stop_event.is_set() and websocket in connection_manager.active_connections:
+            current_running = await controller.is_running()
+            if last_running_state is None or current_running != last_running_state:
+                await connection_manager.broadcast(
+                    {"action": "on_start" if current_running else "on_exit"}
+                )
+                last_running_state = current_running
 
             if await controller.is_dirty():
                 await delegates["mididings_context_update"]()
 
-    except WebSocketDisconnect:
-        connection_manager.disconnect(websocket)        
-    except asyncio.exceptions.CancelledError:
-        print("asyncio CancelledError exception")
-    except Exception as e:
-        print(f"Unexpected WebSocket error: {e}")
-        connection_manager.disconnect(websocket)        
+            await asyncio.sleep(0.1)
+
+    receiver_task = asyncio.create_task(receive_loop())
+    monitor_task = asyncio.create_task(monitor_loop())
+
+    try:
+        await asyncio.wait(
+            {receiver_task, monitor_task},
+            return_when=asyncio.FIRST_COMPLETED,
+        )
     finally:
-        print("exit")
-
-
-async def on_quit(websocket: WebSocket = None):
-    await connection_manager.broadcast(
-        {
-            "action": "on_terminate",
-        }
-    )
+        stop_event.set()
+        receiver_task.cancel()
+        monitor_task.cancel()
+        await asyncio.gather(receiver_task, monitor_task, return_exceptions=True)
+        connection_manager.disconnect(websocket)
 
 
 async def on_connect(websocket: WebSocket = None):
