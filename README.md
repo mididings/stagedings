@@ -47,9 +47,9 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 
 #### ℹ️ About commands
 * ***Restart*** will restart mididings process
-* ***Panic*** send not off to all ports and all channels
+* ***Panic*** send note off to all ports and all channels
 * ***Quit*** stop mididings, be carefull
-* *Query is a work in progress*
+* ***Query*** is used by the backend but does nothing in the frontend at the moment.
 
 
 ---
