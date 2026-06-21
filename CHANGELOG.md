@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.1 - 2026-06-20
+
+### Documentation
+
+- Update frontend
+
+### Features
+
+- Add runner script for local debugging
+
+### Miscellaneous Tasks
+
+- Update CHANGELOG for version 1.5.0 release
+- Remove dead wood
+- Swipe command button color
+- Bump version to 0.1.1
+
+### Refactor
+
+- Optimize WebSocket status updates to broadcast only on state changes
+- Enhance WebSocket handling with separate receive and monitor loops
+- Remove the unused on_quit/on_terminate action
+- Add title and version handling in FastAPI and navigation template
+- Update UI buttons for improved layout and styling
+
 ## 1.5.0 - 2026-06-13
 
 ### Bug Fixes
