@@ -109,14 +109,14 @@
     const socket = new WebSocket(`${scheme}://${host}/ws`);
 
     socket.onopen = function (event) {
-        socket.send('{"action" : "on_connect"}');
-        document.querySelector('#mididings-state').innerHTML = '<div class="card border-success">RUNNING</div>';
-        document.querySelector('#server-state').innerHTML = '<div class="card border-success">RUNNING</div>';
+        socket.send(JSON.stringify({ 'action': 'on_connect' }));
+        setHtml('mididings-state', '<div class="card border-success">RUNNING</div>');
+        setHtml('server-state', '<div class="card border-success">RUNNING</div>');
     }
 
     socket.onclose = function (event) {
-        document.querySelector('#mididings-state').innerHTML = '<div class="card border-danger">UNKNOWN</div>';
-        document.querySelector('#server-state').innerHTML = '<div class="card border-danger">STOPPED</div>';
+        setHtml('mididings-state', '<div class="card border-danger">UNKNOWN</div>');
+        setHtml('server-state', '<div class="card border-danger">STOPPED</div>');
     }
 
     socket.onmessage = function (event) {
@@ -139,37 +139,35 @@
     }
 
     function on_start() {
-        document.querySelector('#mididings-state').innerHTML = '<div class="card border-success">RUNNING</div>';
+        setHtml('mididings-state', '<div class="card border-success">RUNNING</div>');
     }
 
     function on_exit() {
-        document.querySelector('#mididings-state').innerHTML = '<div class="card border-danger">STOPPED</div>';
+        setHtml('mididings-state', '<div class="card border-danger">STOPPED</div>');
     }
 
     function on_render(context) {
         // Render the content section
-        var subscenes = render_scene(context);
+        const subscenes = render_scene(context);
         render_subscene(subscenes);
     }
 
     function render_scene(context) {
-        var count = 0;
-        var content = "";
-        var subscenes = [];
+        let count = 0;
+        let content = "";
+        let subscenes = [];
 
         // Scenes
-        for (var index in context.items) {
-
-            var scene = context.items[index];
+        for (const scene of context.items) {
 
             if (count % 2 == 0)
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
-            var button_class = "'w-100 btn btn-block switch_scene ";
+            let button_class = "'w-100 btn btn-block switch_scene ";
             if (scene.current) {
-                document.querySelector('#current_scene').textContent = scene.id;
-                document.querySelector('#current_scene_name').textContent = scene.name;
+                setText('current_scene', scene.id);
+                setText('current_scene_name', scene.name);
                 button_class += "btn-primary'";
                 subscenes = scene.subscenes;
             }
@@ -186,29 +184,33 @@
                 content += "</div>";
         }
         // Render the scenes section
-        document.querySelector('#scenes').innerHTML = content;
+        setHtml('scenes', content);
 
         return subscenes;
     }
 
     function render_subscene(subscenes) {
         // Subscenes 
-        count = 0;
-        content = "";
+        let count = 0;
+        let content = "";
+        if (!subscenes || subscenes.length === 0) {
+            setHtml('subscenes', "<div class='display-6 row mt-1 mb-1'><div class='col-md-12'>No subscenes available</div></div>");
+            setText('current_subscene', "0");
+            setText('current_subscene_name', "");
+            return;
+        }
 
-        for (var index in subscenes) {
-
-            var scene = subscenes[index];
+        for (const scene of subscenes) {
 
             if (count % 4 == 0)
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
-            var button_class = "'w-100 btn btn-block switch_subscene ";
+            let button_class = "'w-100 btn btn-block switch_subscene ";
             if (scene.current) {
                 button_class += "btn-info'";
-                document.querySelector('#current_subscene').textContent = scene.id;
-                document.querySelector('#current_subscene_name').textContent = scene.name;
+                setText('current_subscene', scene.id);
+                setText('current_subscene_name', scene.name);
             }
             else
                 button_class += "btn-outline-dark'";
@@ -223,7 +225,15 @@
                 content += "</div>";
         }
         // Render the subscenes section
-        document.querySelector("#subscenes").innerHTML = content;
+        setHtml('subscenes', content);
+    }
+
+    function setHtml(id, html) {
+        document.getElementById(id).innerHTML = html;
+    }
+
+    function setText(id, text) {
+        document.getElementById(id).textContent = text;
     }
 
     document.getElementById("scenes").addEventListener("click", function (event) {
