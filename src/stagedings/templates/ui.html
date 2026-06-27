@@ -103,181 +103,198 @@
 {% block websockets %}
 
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function () {
 
-        let scheme = window.location.protocol === "https:" ? "wss" : "ws";
-        let host = window.location.host;
-        let socket = new WebSocket(`${scheme}://${host}/ws`);
+    const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+    const host = window.location.host;
+    const socket = new WebSocket(`${scheme}://${host}/ws`);
 
-        socket.onopen = function (event) {
-            socket.send('{"action" : "on_connect"}');
-            $('#mididings-state').html('<div class="card border-success">RUNNING</div>');
-            $('#server-state').html('<div class="card border-success">RUNNING</div>');
+    socket.onopen = function (event) {
+        socket.send('{"action" : "on_connect"}');
+        document.querySelector('#mididings-state').innerHTML = '<div class="card border-success">RUNNING</div>';
+        document.querySelector('#server-state').innerHTML = '<div class="card border-success">RUNNING</div>';
+    }
+
+    socket.onclose = function (event) {
+        document.querySelector('#mididings-state').innerHTML = '<div class="card border-danger">UNKNOWN</div>';
+        document.querySelector('#server-state').innerHTML = '<div class="card border-danger">STOPPED</div>';
+    }
+
+    socket.onmessage = function (event) {
+        const json = JSON.parse(event.data);
+        const action = json["action"];
+        const payload = json["payload"];
+        switch (action) {
+            case "mididings_context_update":
+                on_render(payload);
+                break;
+            case "on_exit":
+                on_exit();
+                break;
+            case "on_start":
+                on_start();
+                break;
+            default:
+                break;
         }
+    }
 
-        socket.onclose = function (event) {
-            $('#mididings-state').html('<div class="card border-danger">UNKNOWN</div>');
-            $('#server-state').html('<div class="card border-danger">STOPPED</div>');
-        }
+    function on_start() {
+        document.querySelector('#mididings-state').innerHTML = '<div class="card border-success">RUNNING</div>';
+    }
 
-        socket.onmessage = function (event) {
-            const json = JSON.parse(event.data);
-            const action = json["action"];
-            const payload = json["payload"];
-            switch (action) {
-                case "mididings_context_update":
-                    refresh(payload);
-                    break;
-                case "on_exit":
-                    exit();
-                    break;
-                case "on_start":
-                    start();
-                    break;
-                default:
-                    break;
+    function on_exit() {
+        document.querySelector('#mididings-state').innerHTML = '<div class="card border-danger">STOPPED</div>';
+    }
+
+    function on_render(context) {
+        // Render the content section
+        var subscenes = render_scene(context);
+        render_subscene(subscenes);
+    }
+
+    function render_scene(context) {
+        var count = 0;
+        var content = "";
+        var subscenes = [];
+
+        // Scenes
+        for (var index in context.items) {
+
+            var scene = context.items[index];
+
+            if (count % 2 == 0)
+                content += "<div class='row mt-1 mb-1'>";
+
+            // Button style
+            var button_class = "'w-100 btn btn-block switch_scene ";
+            if (scene.current) {
+                document.querySelector('#current_scene').textContent = scene.id;
+                document.querySelector('#current_scene_name').textContent = scene.name;
+                button_class += "btn-primary'";
+                subscenes = scene.subscenes;
             }
-        }
+            else
+                button_class += "btn-outline-dark'";
 
-        function start() {
-            $('#mididings-state').html('<div class="card border-success">RUNNING</div>');
-        }
+            content += "<div class='col-md-6'>";
+            content += "<input class=" + button_class + " type='button' name='" + scene.id.toString() + "' value='" + scene.name + "'>";
+            content += "</div>";
 
-        function exit() {
-            $('#mididings-state').html('<div class="card border-danger">STOPPED</div>');
-        }
+            count++;
 
-        function terminate() {
-            socket.close();
-            $('#server-state').html('<div class="card border-danger">STOPPED</div>');
-            $('#mididings-state').html('<div class="card border-danger">STOPPED</div>');
-        }
-
-        function refresh(context) {
-            //
-            // Redraw the content section
-            //                
-            var count = 0;
-            var content = "";
-            var subscenes = [];
-
-            // Reset view
-            $("#scenes").text("");
-            $('#subscenes').text("");
-            $('#current_subscene_name').text("...");
-            $('#current_subscene').text("0");
-
-            // Scenes
-            for (let index in context.items) {
-
-                var scene = context.items[index];
-
-                if (count % 2 == 0)
-                    content += "<div class='row mt-1 mb-1'>";
-
-                // Button style
-                var button_class = "'w-100 btn btn-block switch_scene ";
-                if (scene.current) {
-                    $('#current_scene').text(scene.id);
-                    $('#current_scene_name').text(scene.name);
-                    button_class += "btn-primary'";
-                    subscenes = scene.subscenes;
-                }
-                else
-                    button_class += "btn-outline-dark'";
-
-                content += "<div class='col-md-6'>";
-                content += "<input class=" + button_class + " type='button' name='" + scene.id.toString() + "' value='" + scene.name + "'>";
+            if (count % 2 == 0)
                 content += "</div>";
-
-                count++;
-
-                if (count % 2 == 0)
-                    content += "</div>";
-            }
-            $('#scenes').text("");
-            $("#scenes").append(content);
-
-            // Subscenes 
-            count = 0;
-            content = "";
-
-            for (let index in subscenes) {
-
-                var scene = subscenes[index];
-
-                if (count % 4 == 0)
-                    content += "<div class='row mt-1 mb-1'>";
-
-                // Button style
-                var button_class = "'w-100 btn btn-block switch_subscene ";
-                if (scene.current) {
-                    button_class += "btn-info'";
-                    $('#current_subscene').text(scene.id);
-                    $('#current_subscene_name').text(scene.name);
-                }
-                else
-                    button_class += "btn-outline-dark'";
-
-                content += "<div class='col-md-3'>";
-                content += "<input class=" + button_class + " type='button' name='" + scene.id.toString() + "' value='" + scene.name + "'>";
-                content += "</div>";
-
-                count++;
-
-                if (count % 4 == 0)
-                    content += "</div>";
-            }
-            $('#subscenes').append(content);
         }
+        // Render the scenes section
+        document.querySelector('#scenes').innerHTML = content;
 
-        // Scene navigation delegate
-        $("#scenes").delegate("input.switch_scene", "click", function (event) {
+        return subscenes;
+    }
+
+    function render_subscene(subscenes) {
+        // Subscenes 
+        count = 0;
+        content = "";
+
+        for (var index in subscenes) {
+
+            var scene = subscenes[index];
+
+            if (count % 4 == 0)
+                content += "<div class='row mt-1 mb-1'>";
+
+            // Button style
+            var button_class = "'w-100 btn btn-block switch_subscene ";
+            if (scene.current) {
+                button_class += "btn-info'";
+                document.querySelector('#current_subscene').textContent = scene.id;
+                document.querySelector('#current_subscene_name').textContent = scene.name;
+            }
+            else
+                button_class += "btn-outline-dark'";
+
+            content += "<div class='col-md-3'>";
+            content += "<input class=" + button_class + " type='button' name='" + scene.id.toString() + "' value='" + scene.name + "'>";
+            content += "</div>";
+
+            count++;
+
+            if (count % 4 == 0)
+                content += "</div>";
+        }
+        // Render the subscenes section
+        document.querySelector("#subscenes").innerHTML = content;
+    }
+
+    document.getElementById("scenes").addEventListener("click", function (event) {
+        const target = event.target;
+
+        if (target.matches("input.switch_scene")) {
             socket.send(JSON.stringify({
                 action: "switch_scene",
-                id: $(this).attr('name')
+                id: target.getAttribute("name")
             }));
-        });
+        }
+    });
 
-        // Sub-Scene navigation delegate
-        $("#subscenes").delegate("input.switch_subscene", "click", function (event) {
+    // Sub-Scene navigation delegate
+    document.getElementById("subscenes").addEventListener("click", function (event) {
+        const target = event.target;
+
+        if (target.matches("input.switch_subscene")) {
             socket.send(JSON.stringify({
                 action: "switch_subscene",
-                id: $(this).attr('name')
+                id: target.getAttribute("name")
             }));
-        });
+        }
+    });
 
-        $('#next_scene').click(function (event) {
-            socket.send('{"action" : "next_scene"}');
-        });
+    document.getElementById("next_scene").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "next_scene"
+        }));
+    });
 
-        $('#prev_scene').click(function (event) {
-            socket.send('{"action" : "prev_scene"}');
-        });
+    document.getElementById("prev_scene").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "prev_scene"
+        }));
+    });
 
-        $('#next_subscene').click(function (event) {
-            socket.send('{"action" : "next_subscene"}');
-        });
+    document.getElementById("next_subscene").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "next_subscene"
+        }));
+    });
 
-        $('#prev_subscene').click(function (event) {
-            socket.send('{"action" : "prev_subscene"}');
-        });
+    document.getElementById("prev_subscene").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "prev_subscene"
+        }));
+    });
 
-        $('#restart').click(function (event) {
-            socket.send('{"action" : "restart"}');
-        });
+    document.getElementById("restart").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "restart"
+        }));
+    });
 
-        $('#panic').click(function (event) {
-            socket.send('{"action" : "panic"}');
-        });
+    document.getElementById("panic").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "panic"
+        }));
+    });
 
-        $('#query').click(function (event) {
-            socket.send('{"action" : "query"}');
-        });
+    document.getElementById("query").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "query"
+        }));
+    });
 
-        $('#quit').click(function (event) {
-            socket.send('{"action" : "quit"}');
-        });
+    document.getElementById("quit").addEventListener("click", function (event) {
+        socket.send(JSON.stringify({
+            action: "quit"
+        }));
     });
     window.addEventListener("beforeunload", () => {
         socket.close();
