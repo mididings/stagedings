@@ -258,7 +258,7 @@
         if (!event.target.matches("input.switch_scene"))
             return;
         send("switch_scene", event.target.name);
-        });
+    });
 
     document.getElementById("subscenes").addEventListener("click", (event) => {
         if (!event.target.matches("input.switch_subscene"))
