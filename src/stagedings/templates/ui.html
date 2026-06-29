@@ -123,28 +123,28 @@
         const obj = JSON.parse(event.data);
         switch (obj.action) {
             case "mididings_context_update":
-                on_render(obj.payload);
+                onRender(obj.payload);
                 break;
             case "on_exit":
-                on_exit();
+                onExit();
                 break;
             case "on_start":
-                on_start();
+                onStart();
                 break;
             default:
                 break;
         }
     }
 
-    function on_start() {
+    function onStart() {
         setHtml("mididings-state", '<div class="card border-success">RUNNING</div>');
     }
 
-    function on_exit() {
+    function onExit() {
         setHtml("mididings-state", '<div class="card border-danger">STOPPED</div>');
     }
 
-    function on_render(context) {
+    function onRender(context) {
         // Render the content section
         const subscenes = render_scene(context);
         render_subscene(subscenes);
@@ -162,20 +162,20 @@
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
-            let button_class = "w-100 btn btn-block switch_scene ";
+            let buttonClass = "w-100 btn btn-block switch_scene ";
             if (scene.current) {
                 setText("current_scene", scene.id);
                 setText("current_scene_name", scene.name);
-                button_class += "btn-primary";
+                buttonClass += "btn-primary";
                 subscenes = scene.subscenes;
             }
             else
-                button_class += "btn-outline-dark";
+                buttonClass += "btn-outline-dark";
 
             content += `
                 <div class="col-md-6">
                     <input
-                        class="${button_class}"
+                        class="${buttonClass}"
                         type="button"
                         name="${scene.id}"
                         value="${scene.name}">
@@ -209,19 +209,19 @@
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
-            let button_class = "w-100 btn btn-block switch_subscene ";
+            let buttonClass = "w-100 btn btn-block switch_subscene ";
             if (scene.current) {
-                button_class += "btn-info";
+                buttonClass += "btn-info";
                 setText("current_subscene", scene.id);
                 setText("current_subscene_name", scene.name);
             }
             else
-                button_class += "btn-outline-dark";
+                buttonClass += "btn-outline-dark";
 
             content += `
                 <div class="col-md-3">
                     <input
-                        class="${button_class}"
+                        class="${buttonClass}"
                         type="button"
                         name="${scene.id}"
                         value="${scene.name}">
