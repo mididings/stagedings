@@ -109,7 +109,7 @@
     const socket = new WebSocket(`${scheme}://${host}/ws`);
 
     socket.onopen = () => {
-        socket.send(JSON.stringify({ 'action': 'on_connect' }));
+        send("on_connect");
         setHtml("mididings-state", '<div class="card border-success">RUNNING</div>');
         setHtml("server-state", '<div class="card border-success">RUNNING</div>');
     }
