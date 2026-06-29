@@ -234,76 +234,59 @@
         document.getElementById(id).textContent = text;
     }
 
-    document.getElementById("scenes").addEventListener("click", (event) => {
-        const target = event.target;
+    function send(action, id = null) {
+        const message = { action };
 
-        if (target.matches("input.switch_scene")) {
-            socket.send(JSON.stringify({
-                action: "switch_scene",
-                id: target.name
-            }));
-        }
-    });
+        if (id !== null)
+            message.id = id;
+
+        socket.send(JSON.stringify(message));
+    }
 
     // Sub-Scene navigation delegate
+    document.getElementById("scenes").addEventListener("click", (event) => {
+        const target = event.target;
+        send("switch_scene", target.name);
+
+    });
+
     document.getElementById("subscenes").addEventListener("click", (event) => {
         const target = event.target;
-
-        if (target.matches("input.switch_subscene")) {
-            socket.send(JSON.stringify({
-                action: "switch_subscene",
-                id: target.name
-            }));
-        }
+        send("switch_subscene", target.name);
     });
 
     document.getElementById("next_scene").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "next_scene"
-        }));
+        send("next_scene");
     });
 
     document.getElementById("prev_scene").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "prev_scene"
-        }));
+        send("prev_scene");
     });
 
     document.getElementById("next_subscene").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "next_subscene"
-        }));
+        send("next_subscene");
     });
 
     document.getElementById("prev_subscene").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "prev_subscene"
-        }));
+        send("prev_subscene");
     });
 
     document.getElementById("restart").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "restart"
-        }));
+        send("restart");
     });
 
     document.getElementById("panic").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "panic"
-        }));
+        send("panic");
     });
 
     document.getElementById("query").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "query"
-        }));
+        send("query");
     });
 
     document.getElementById("quit").addEventListener("click", () => {
-        socket.send(JSON.stringify({
-            action: "quit"
-        }));
+        send("quit");
     });
+
     window.addEventListener("beforeunload", () => {
         socket.close();
     });
