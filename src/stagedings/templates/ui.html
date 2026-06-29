@@ -108,24 +108,22 @@
     const host = window.location.host;
     const socket = new WebSocket(`${scheme}://${host}/ws`);
 
-    socket.onopen = function (event) {
+    socket.onopen = () => {
         socket.send(JSON.stringify({ 'action': 'on_connect' }));
         setHtml('mididings-state', '<div class="card border-success">RUNNING</div>');
         setHtml('server-state', '<div class="card border-success">RUNNING</div>');
     }
 
-    socket.onclose = function (event) {
+    socket.onclose = () => {
         setHtml('mididings-state', '<div class="card border-danger">UNKNOWN</div>');
         setHtml('server-state', '<div class="card border-danger">STOPPED</div>');
     }
 
-    socket.onmessage = function (event) {
-        const json = JSON.parse(event.data);
-        const action = json["action"];
-        const payload = json["payload"];
-        switch (action) {
+    socket.onmessage = (event) => {
+        const obj = JSON.parse(event.data);
+        switch (obj.action) {
             case "mididings_context_update":
-                on_render(payload);
+                on_render(obj.payload);
                 break;
             case "on_exit":
                 on_exit();
@@ -236,72 +234,72 @@
         document.getElementById(id).textContent = text;
     }
 
-    document.getElementById("scenes").addEventListener("click", function (event) {
+    document.getElementById("scenes").addEventListener("click", (event) => {
         const target = event.target;
 
         if (target.matches("input.switch_scene")) {
             socket.send(JSON.stringify({
                 action: "switch_scene",
-                id: target.getAttribute("name")
+                id: target.name
             }));
         }
     });
 
     // Sub-Scene navigation delegate
-    document.getElementById("subscenes").addEventListener("click", function (event) {
+    document.getElementById("subscenes").addEventListener("click", (event) => {
         const target = event.target;
 
         if (target.matches("input.switch_subscene")) {
             socket.send(JSON.stringify({
                 action: "switch_subscene",
-                id: target.getAttribute("name")
+                id: target.name
             }));
         }
     });
 
-    document.getElementById("next_scene").addEventListener("click", function (event) {
+    document.getElementById("next_scene").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "next_scene"
         }));
     });
 
-    document.getElementById("prev_scene").addEventListener("click", function (event) {
+    document.getElementById("prev_scene").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "prev_scene"
         }));
     });
 
-    document.getElementById("next_subscene").addEventListener("click", function (event) {
+    document.getElementById("next_subscene").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "next_subscene"
         }));
     });
 
-    document.getElementById("prev_subscene").addEventListener("click", function (event) {
+    document.getElementById("prev_subscene").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "prev_subscene"
         }));
     });
 
-    document.getElementById("restart").addEventListener("click", function (event) {
+    document.getElementById("restart").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "restart"
         }));
     });
 
-    document.getElementById("panic").addEventListener("click", function (event) {
+    document.getElementById("panic").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "panic"
         }));
     });
 
-    document.getElementById("query").addEventListener("click", function (event) {
+    document.getElementById("query").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "query"
         }));
     });
 
-    document.getElementById("quit").addEventListener("click", function (event) {
+    document.getElementById("quit").addEventListener("click", () => {
         socket.send(JSON.stringify({
             action: "quit"
         }));
