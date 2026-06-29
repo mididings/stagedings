@@ -160,7 +160,7 @@
         // Scenes
         for (const scene of context.items) {
 
-            if (count % 2 == 0)
+            if (count % 2 === 0)
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
@@ -180,7 +180,7 @@
 
             count++;
 
-            if (count % 2 == 0)
+            if (count % 2 === 0)
                 content += "</div>";
         }
         // Render the scenes section
@@ -194,7 +194,7 @@
         let count = 0;
         let content = "";
         if (!subscenes || subscenes.length === 0) {
-            setHtml('subscenes', "<div class='display-6 row mt-1 mb-1'><div class='col-md-12'>No subscenes available</div></div>");
+            setHtml('subscenes', "<div class='display-6 row mt-1 mb-1'><div class='col-md-12'>No subscenes are defined for this scene.</div></div>");
             setText('current_subscene', "0");
             setText('current_subscene_name', "");
             return;
@@ -202,7 +202,7 @@
 
         for (const scene of subscenes) {
 
-            if (count % 4 == 0)
+            if (count % 4 === 0)
                 content += "<div class='row mt-1 mb-1'>";
 
             // Button style
@@ -221,7 +221,7 @@
 
             count++;
 
-            if (count % 4 == 0)
+            if (count % 4 === 0)
                 content += "</div>";
         }
         // Render the subscenes section
