@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.2 - 2026-07-02
+
+### Documentation
+
+- Update CHANGELOG for version 1.5.1 release
+- Fix type and clarify command descriptions in README
+- Update README for clarity on local setup and add sandbox setup instructions
+- Update frontend screenshot for v0.1.2
+
+### Miscellaneous Tasks
+
+- Document formatting
+- Update version to 0.1.2 in pyproject.toml and cli.py
+
+### Refactor
+
+- refactor Remove jQuery dependency #27
+- Replace direct DOM manipulation with helper functions, remove var keyword, use 'for of' loop #27
+- Use scrict equality #27
+- stop using bracket notation / use arrow functions and remove unused parameters
+- streamline WebSocket message sending with a dedicated send function
+- standardize string quotes and improve event delegation for scene navigation #27
+- use camelCase
+- replace direct socket.send with send function for connection action
+
+### Styling
+
+- Remove obsolete btn-block
+
 ## 1.5.1 - 2026-06-20
 
 ### Documentation
