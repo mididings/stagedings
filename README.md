@@ -79,13 +79,13 @@ $ stagedings [--host HOST] [--port PORT]
     * Default: 5000
 
 ## Use cases
-### Local development (single machine)
+### Local setup (single machine)
 ```sh
 $ stagedings
 ```
 This runs everything locally on:
 ```sh
-http://localhost:5000
+http://localhost:5000 by default
 ```
 ### Network / multi-client setup
 When clients access the server from other machines, you must expose the backend:
@@ -96,10 +96,18 @@ or:
 ```sh
 $ stagedings --host 192.168.1.100
 ```
+### Sandbox setup (for debugging)
+```sh
+$ python scripts/run_cli.py [--host HOST] [--port PORT]
+```
+This runs everything locally on:
+```sh
+http://localhost:5000 by default
+```
 ### Accessing the UI
 Once running, open in a browser:
 ```sh
-http://dings.local.com:5000
+http://your-hostname:5000
 ```
 or:
 ```sh
