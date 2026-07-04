@@ -11,15 +11,14 @@ from mididings.live.osc_control import LiveOSC
 
 
 class OscController:
-    def __init__(self, config, _scene_controller):
+    def __init__(self, control_port, listen_port, scene_controller):
 
-        self.server = LiveOSC(
-            self, config["control_port"], config["listen_port"])
+        self.server = LiveOSC(self, control_port, listen_port)
 
         self.dirty = False
         self.running = False
 
-        self.scene_controller = _scene_controller
+        self.scene_controller = scene_controller
 
         self.server.start()
         self.server.query()
