@@ -67,7 +67,7 @@ $ pip install stagedings
 ```
 ## ▶️ Running the application
 ```sh
-$ stagedings [--host HOST] [--port PORT]
+$ stagedings [--host HOST] [--port PORT] [--control-port CONTROL_PORT] [--listen-port LISTEN_PORT]
 ```
 ## Options
 * --host
@@ -77,7 +77,12 @@ $ stagedings [--host HOST] [--port PORT]
 * --port
   * FastAPI + WebSocket server port
     * Default: 5000
-
+* --control-port
+  * OSC port where mididings listens for commands.
+    * Default: 56418
+* --listen-port
+  * OSC port where stagedings listens for notifications from mididings.
+    * Default: 56419
 ## Use cases
 ### Local setup (single machine)
 ```sh
