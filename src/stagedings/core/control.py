@@ -4,15 +4,14 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 '''
-    Main controller, driving the scene and osc controllers
+    The Orchestrator, handling scene changes and osc communication with mididings.
 '''
 
 
 from .osc import OscController
 from .scene import SceneController
 
-
-class Controller:
+class Orchestrator:
     def __init__(self, control_port, listen_port) -> None:
         self.scene_controller = SceneController()
         self.osc_controller = OscController(control_port, listen_port, self.scene_controller)
@@ -56,6 +55,32 @@ class Controller:
     async def switch_subscene(self, value):
         self.osc_controller.server.switch_subscene(value)
 
-
-
-
+    async def on_connect(self):
+        await self.set_dirty(True)
+        
+    async def execute(self, action = None, id = None):
+        if action == "next_scene":
+            await self.next_scene()
+        elif action == "prev_scene":
+            await self.prev_scene()
+        elif action == "next_subscene":
+            await self.next_subscene()
+        elif action == "prev_subscene":
+            await self.prev_subscene()
+        elif action == "panic":
+            await self.panic()
+        elif action == "restart":
+            await self.restart()
+        elif action == "query":
+            await self.query()
+        elif action == "quit":
+            await self.quit()
+        elif action == "switch_scene" and id is not None:
+            await self.switch_scene(id)
+        elif action == "switch_subscene" and id is not None:
+            await self.switch_subscene(id)
+        elif action == "on_connect":
+            await self.on_connect()
+        else:
+            print(f"Unknown action: {action} with id: {id}")
+        
