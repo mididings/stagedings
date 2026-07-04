@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.4 - 2026-07-04
+
+### Miscellaneous Tasks
+
+- Remove openapi version
+- Bump version to 0.1.3
+
+### Refactor
+
+- Use FastAPI and separation of concerns #33
+
+## 1.5.3 - 2026-07-04
+
+### Documentation
+
+- Update CHANGELOG for version 1.5.2 release
+- Update Readme for OSC ports arguments #31
+
+### Features
+
+- Pass the OSCInterface control port and listen port as argument in the cli #31
+
 ## 1.5.2 - 2026-07-02
 
 ### Documentation
