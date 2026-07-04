@@ -57,7 +57,6 @@ def custom_openapi():
         version=version,
         description=description,
         routes=app.routes,
-        openapi_version="3.1.0",
         summary="An UI and API for mididings community version"
     )
     app.openapi_schema["info"]["x-logo"] = {
