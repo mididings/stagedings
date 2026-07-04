@@ -3,14 +3,14 @@
 
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-import argparse
 import os
 import json
 import asyncio
 import uvicorn
-
+import argparse
 from pathlib import Path
 from importlib import resources
+from contextlib import asynccontextmanager
 import stagedings
 
 from stagedings.core.control import Controller
@@ -34,7 +34,20 @@ description = """
 title = "stagedings"
 version = "0.1.2"
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    controller = Controller(app.state.control_port,app.state.listen_port)
+    delegates = build_delegates(controller)
+    
+    app.state.controller = controller
+    app.state.delegates = delegates
+
+    yield  # >>> app runs here (WS + API active)
+
+    # --- SHUTDOWN PHASE ---
+    # optional cleanup
+    
+app = FastAPI(lifespan=lifespan)
 
 def custom_openapi():
     if app.openapi_schema:
@@ -64,21 +77,13 @@ app.mount(
 )
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
-config = resources.files(stagedings) / "static" / "config.json"
-with open(config) as FILE:  
-    configuration = json.load(FILE)
-
-
-# Mididings and OSC context
-controller = Controller(configuration["osc_server"])
-
 # WebSocket connection manager
 connection_manager = ConnectionManager()
 
 async def mididings_context_update():
-    await controller.set_dirty(False)
+    await app.state.controller.set_dirty(False)
     await connection_manager.broadcast(
-        {"action": "mididings_context_update", "payload": controller.scene_controller.payload}
+        {"action": "mididings_context_update", "payload": app.state.controller.scene_controller.payload}
     )
 
 # UI enpoints
@@ -95,7 +100,7 @@ async def scalar_html():
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def entry_point(request: Request):
     return templates.TemplateResponse(
-        name="ui.html" if controller.scene_controller.scenes else "no_context.html",
+        name="ui.html" if request.app.state.controller.scene_controller.scenes else "no_context.html",
         context={
             "request": request,
             "title": title,
@@ -111,9 +116,9 @@ async def entry_point(request: Request):
     summary="Switch to the given scene and subscene number.", 
     tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def switch_scene(sceneId: int, subsceneId: int):
-    await controller.switch_scene(sceneId)
-    await controller.switch_subscene(subsceneId)
+async def switch_scene(request: Request,sceneId: int, subsceneId: int):
+    await request.app.state.controller.switch_scene(sceneId)
+    await request.app.state.controller.switch_subscene(subsceneId)
     return Response(status_code=204)
 
 # -----
@@ -122,8 +127,8 @@ async def switch_scene(sceneId: int, subsceneId: int):
     summary="Switch to the given scene number.", 
     tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def switch_scene(sceneId: int):
-    await controller.switch_scene(sceneId)
+async def switch_scene(request: Request, sceneId: int):
+    await request.app.state.controller.switch_scene(sceneId)
     return Response(status_code=204)
 
 # -----
@@ -132,24 +137,24 @@ async def switch_scene(sceneId: int):
     summary="Switch to the given subscene number.", 
     tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def switch_subscene(subsceneId: int):
-    await controller.switch_subscene(subsceneId)
+async def switch_subscene(request: Request, subsceneId: int):
+    await request.app.state.controller.switch_subscene(subsceneId)
     return Response(status_code=204)
 
 # -----
 @app.post("/api/scenes/prev", description="Switch to the previous scene.",
     summary="Switch to the previous scene.", tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def prev_scene():
-    await controller.prev_scene()
+async def prev_scene(request: Request):
+    await request.app.state.controller.prev_scene()
     return Response(status_code=204)
 
 # -----
 @app.post("/api/scenes/next", description="Switch to the next scene.", 
          summary="Switch to the next scene.", tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def next_scene():
-    await controller.next_scene()
+async def next_scene(request: Request):
+    await request.app.state.controller.next_scene()
     return Response(status_code=204)
 
 # -----
@@ -157,16 +162,16 @@ async def next_scene():
          summary="Switch to the previous subscene.", 
          tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def prev_subscene():
-    await controller.prev_subscene()
+async def prev_subscene(request: Request):
+    await request.app.state.controller.prev_subscene()
     return Response(status_code=204)
 
 # -----
 @app.post("/api/subscenes/next", description="Switch to the next subscene.", 
          summary="Switch to the next subscene.", tags=["Navigation"], responses={204: {"description": "No content"}}
 )
-async def next_subscene():
-    await controller.next_subscene()
+async def next_subscene(request: Request):
+    await request.app.state.controller.next_subscene()
     return Response(status_code=204)    
 
 # System endpoints
@@ -174,24 +179,24 @@ async def next_subscene():
 @app.post("/api/system/panic", description="Send all-notes-off on all channels and on all output ports.", 
          summary="Send all-notes-off on all channels and on all output ports.", 
          tags=["System"], responses={204: {"description": "No content"}})
-async def panic():
-    await controller.panic()
+async def panic(request: Request):
+    await request.app.state.controller.panic()
     return Response(status_code=204)
 
 # -----
 @app.post("/api/system/quit", description="Terminate mididings.", summary="Terminate mididings.", 
          tags=["System"], responses={204: {"description": "No content"}}
 )
-async def quit():
-    await controller.quit()
+async def quit(request: Request):
+    await request.app.state.controller.quit()
     return Response(status_code=204)
 
 # -----
 @app.post("/api/system/restart", description="Restart mididings.", summary="Restart mididings.", 
          tags=["System"], responses={204: {"description": "No content"}}
 )
-async def restart():
-    await controller.restart()
+async def restart(request: Request):
+    await request.app.state.controller.restart()
     return Response(status_code=204)
 
 # -----
@@ -199,8 +204,8 @@ async def restart():
          summary="Send config, current scene/subscene to all notify ports.", 
          tags=["System"], responses={204: {"description": "No content"}}
 )
-async def query():
-    await controller.query()
+async def query(request: Request):
+    await request.app.state.controller.query()
     return Response(status_code=204)
 
 """ Websocket handler """
@@ -217,11 +222,11 @@ async def websocket_endpoint(websocket: WebSocket):
             while websocket in connection_manager.active_connections:
                 data = await websocket.receive_json()
                 action = data.get("action")
-                if action in delegates:
+                if action in app.state.delegates:
                     if "id" in data:
-                        await delegates[action](int(data["id"]))
+                        await app.state.delegates[action](int(data["id"]))
                     else:
-                        await delegates[action]()
+                        await app.state.delegates[action]()
         except WebSocketDisconnect:
             pass
         except Exception as exc:
@@ -232,15 +237,15 @@ async def websocket_endpoint(websocket: WebSocket):
     async def monitor_loop():
         nonlocal last_running_state
         while not stop_event.is_set() and websocket in connection_manager.active_connections:
-            current_running = await controller.is_running()
+            current_running = await app.state.controller.is_running()
             if last_running_state is None or current_running != last_running_state:
                 await connection_manager.broadcast(
                     {"action": "on_start" if current_running else "on_exit"}
                 )
                 last_running_state = current_running
 
-            if await controller.is_dirty():
-                await delegates["mididings_context_update"]()
+            if await app.state.controller.is_dirty():
+                await app.state.delegates["mididings_context_update"]()
 
             await asyncio.sleep(0.1)
 
@@ -248,10 +253,7 @@ async def websocket_endpoint(websocket: WebSocket):
     monitor_task = asyncio.create_task(monitor_loop())
 
     try:
-        await asyncio.wait(
-            {receiver_task, monitor_task},
-            return_when=asyncio.FIRST_COMPLETED,
-        )
+        await asyncio.gather(receiver_task, monitor_task)
     finally:
         stop_event.set()
         receiver_task.cancel()
@@ -261,33 +263,31 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 async def on_connect(websocket: WebSocket = None):
-    await controller.set_dirty(True)
+    await app.state.controller.set_dirty(True)
 
+def build_delegates(controller: Controller):
+    return {
 
-delegates = {
+        "on_connect": on_connect,
 
-    "on_connect": on_connect,
+        "quit": controller.quit,
+        "panic": controller.panic,
+        "query": controller.query,
+        "restart": controller.restart,
 
-    "quit": controller.quit,
-    "panic": controller.panic,
-    "query": controller.query,
-    "restart": controller.restart,
+        "next_scene": controller.next_scene,
+        "prev_scene": controller.prev_scene,
+        "next_subscene": controller.next_subscene,
+        "prev_subscene": controller.prev_subscene,
 
-    "next_scene": controller.next_scene,
-    "prev_scene": controller.prev_scene,
-    "next_subscene": controller.next_subscene,
-    "prev_subscene": controller.prev_subscene,
+        "switch_scene": controller.switch_scene,
+        "switch_subscene": controller.switch_subscene,
 
-    "switch_scene": controller.switch_scene,
-    "switch_subscene": controller.switch_subscene,
-
-    "mididings_context_update": mididings_context_update,
-    
-}
+        "mididings_context_update": mididings_context_update,
+    }
 
 def main():
-
-    parser = argparse.ArgumentParser(description="Run stagedings FastAPI server")
+    parser = argparse.ArgumentParser(description="Run stagedings FastAPI server", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         "--host",
         default="localhost",
@@ -299,7 +299,26 @@ def main():
         default=5000,
         help="FastAPI listen port",
     )
+    
+    parser.add_argument(
+        "--control-port",
+        type=int,
+        default=56418,
+        help="OSC port where mididings listens for commands.",
+    )
+
+    parser.add_argument(
+        "--listen-port",
+        type=int,
+        default=56419,
+        help="OSC port where stagedings listens for notifications from mididings.",
+    )
+
     args = parser.parse_args()
+    
+    # pass config via uvicorn
+    app.state.control_port = args.control_port
+    app.state.listen_port = args.listen_port
 
     uvicorn.run(
         "stagedings.cli:app",

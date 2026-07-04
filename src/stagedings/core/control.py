@@ -13,9 +13,9 @@ from .scene import SceneController
 
 
 class Controller:
-    def __init__(self, config) -> None:
+    def __init__(self, control_port, listen_port) -> None:
         self.scene_controller = SceneController()
-        self.osc_controller = OscController(config, self.scene_controller)
+        self.osc_controller = OscController(control_port, listen_port, self.scene_controller)
 
     async def is_dirty(self):
         return self.osc_controller.dirty
@@ -55,5 +55,7 @@ class Controller:
 
     async def switch_subscene(self, value):
         self.osc_controller.server.switch_subscene(value)
+
+
 
 
