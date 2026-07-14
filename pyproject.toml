@@ -35,7 +35,7 @@ dependencies = [
     "jinja2",
     "pydantic",
     "scalar-fastapi",
-    "mididings[osc,autorestart]",
+    "mididings[osc]",
 ]
 
 classifiers = [
