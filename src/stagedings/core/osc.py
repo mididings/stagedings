@@ -15,8 +15,7 @@ class OscController:
 
         self.server = LiveOSC(self, control_port, listen_port)
 
-        self.dirty = False
-        self.running = False
+        self.dirty = self.running = False
 
         self.scene_controller = scene_controller
 
@@ -37,11 +36,9 @@ class OscController:
 
     '''This is the last OSC operation from /query'''
 
-    def set_current_scene(self, cur_scene, cur_subscene):
-        self.scene_controller.set_current_scene(cur_scene, cur_subscene)
-
-        self.dirty = True
-        self.running = True
+    def set_current_scene(self, scene_id, subscene_id):
+        self.scene_controller.set_current_scene(scene_id, subscene_id)
+        self.dirty = self.running = True
 
     def on_start(self):
         ''' Engine start '''
