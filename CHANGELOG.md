@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.5 - 2026-09-05
+
+### Documentation
+
+- Remove mention of unused "Query" button in README
+- Update screenshot
+
+### Features
+
+- Add favicon.ico and link it in base.html
+
+### Miscellaneous Tasks
+
+- Update CHANGELOG for version 1.5.4 release
+- Update the mididings dependency to remove the "autorestart" option from pyproject.toml.
+- Ensure newline at end of file for release target
+- Bump version to 0.1.4 in pyproject.toml and config.py
+
+### Refactor
+
+- Update scene/subscene variable name
+- Removal of the "Query" button.
+- Enhance button styles and layout for control panel
+- Remove  'autorestart' option from mididings installation
+- Rename script to fit with Makefile target
+
 ## 1.5.4 - 2026-07-04
 
 ### Miscellaneous Tasks
