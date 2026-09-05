@@ -15,12 +15,18 @@
 
         <div class="col-md-4 bg-secondary">
             <div class="row mt-2">
-                <div class="btn-group" role="group" aria-label="Control buttons">
-                    <button class="btn btn-info" type="button" id="panic">Panic</button>
-                    <button class="btn btn-dark" type="button" id="query">Query</button>
-                    <button class="btn btn-warning" type="button" id="restart">Restart</button>
-                    <button class="btn btn-danger" type="button" id="quit">Quit</button>
+                <div class="col-md-6">
+                    <div class="btn-group w-100" role="group" aria-label="Control buttons">
+                        <button class="btn btn-info fw-bold" type="button" id="panic">Panic❕</button>
+                    </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="btn-group w-100" role="group" aria-label="Control buttons">
+                        <button class="btn btn-warning w-50" type="button" id="restart">Restart</button>
+                        <button class="btn btn-danger w-50" type="button" id="quit">Quit</button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -110,13 +116,13 @@
 
     socket.onopen = () => {
         send("on_connect");
-        setHtml("mididings-state", '<div class="card border-success">RUNNING</div>');
-        setHtml("server-state", '<div class="card border-success">RUNNING</div>');
+        setHtml("mididings-state", '<div class="card border-success fw-bold">RUNNING</div>');
+        setHtml("server-state", '<div class="card border-success fw-bold">RUNNING</div>');
     }
 
     socket.onclose = () => {
-        setHtml("mididings-state", '<div class="card border-danger">UNKNOWN</div>');
-        setHtml("server-state", '<div class="card border-danger">STOPPED</div>');
+        setHtml("mididings-state", '<div class="card border-danger fw-bold">UNKNOWN</div>');
+        setHtml("server-state", '<div class="card border-danger fw-bold">STOPPED</div>');
     }
 
     socket.onmessage = (event) => {
@@ -137,11 +143,11 @@
     }
 
     function onStart() {
-        setHtml("mididings-state", '<div class="card border-success">RUNNING</div>');
+        setHtml("mididings-state", '<div class="card border-success fw-bold">RUNNING</div>');
     }
 
     function onExit() {
-        setHtml("mididings-state", '<div class="card border-danger">STOPPED</div>');
+        setHtml("mididings-state", '<div class="card border-danger fw-bold">STOPPED</div>');
     }
 
     function onRender(context) {
@@ -166,7 +172,7 @@
             if (scene.current) {
                 setText("current_scene", scene.id);
                 setText("current_scene_name", scene.name);
-                buttonClass += "btn-primary";
+                buttonClass += "btn-primary fw-bold";
                 subscenes = scene.subscenes;
             }
             else
@@ -211,7 +217,7 @@
             // Button style
             let buttonClass = "w-100 btn switch_subscene ";
             if (scene.current) {
-                buttonClass += "btn-info";
+                buttonClass += "btn-info fw-bold";
                 setText("current_subscene", scene.id);
                 setText("current_subscene_name", scene.name);
             }
@@ -288,10 +294,6 @@
 
     document.getElementById("panic").addEventListener("click", () => {
         send("panic");
-    });
-
-    document.getElementById("query").addEventListener("click", () => {
-        send("query");
     });
 
     document.getElementById("quit").addEventListener("click", () => {

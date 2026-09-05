@@ -31,14 +31,14 @@ class SceneController:
 
             self.scenes.append(scene)
 
-    def set_current_scene(self, cur_scene, cur_subscene):
+    def set_current_scene(self, scene_id, subscene_id):
         '''Build a friendly dict for the javascript'''
         items = []
         for scene in self.scenes:
             item = {
                 "id": scene.id,
                 "name": scene.name,
-                "current": scene.id == cur_scene
+                "current": scene.id == scene_id
             }
 
             subitems = []
@@ -46,7 +46,7 @@ class SceneController:
                 subitem = {
                     "id": subscene.id,
                     "name": subscene.name,
-                    "current": subscene.id == cur_subscene
+                    "current": subscene.id == subscene_id
                 }
                 subitems.append(subitem)
 
@@ -55,5 +55,3 @@ class SceneController:
             items.append(item)
 
         self.payload = {"items": items}
-
-

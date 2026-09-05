@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stagedings"
-version = "0.1.3"
+version = "0.1.4"
 description = "An API to navigate scenes and subscenes that has been configured in a mididings script"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -35,7 +35,7 @@ dependencies = [
     "jinja2",
     "pydantic",
     "scalar-fastapi",
-    "mididings[osc,autorestart]",
+    "mididings[osc]",
 ]
 
 classifiers = [

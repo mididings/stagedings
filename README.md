@@ -49,8 +49,6 @@ An API to navigate scenes and subscenes that has been configured in a [mididings
 * ***Restart*** will restart mididings process
 * ***Panic*** send note off to all ports and all channels
 * ***Quit*** stop mididings, be carefull
-* ***Query*** is used by the backend but does nothing in the frontend at the moment.
-
 
 ---
 
@@ -135,4 +133,4 @@ All files in this repository are released under the terms of the GNU
 General Public License as published by the Free Software Foundation;
 either version 2 or later of the License.
 
-Made in Québec 🇨🇦
+# Made in Québec 🇨🇦
