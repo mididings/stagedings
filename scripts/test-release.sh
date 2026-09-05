@@ -66,7 +66,7 @@ pip install \
   jinja2 \
   pydantic \
   scalar-fastapi \
-  mididings[osc,autorestart]
+  mididings[osc]
 
 echo "==========================================="
 echo "=== Waiting for TestPyPI installability ==="
